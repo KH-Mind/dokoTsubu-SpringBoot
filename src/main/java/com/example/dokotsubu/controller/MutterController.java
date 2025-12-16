@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.dokotsubu.form.PostMutterForm;
 import com.example.dokotsubu.model.Mutter;
 import com.example.dokotsubu.model.User;
 import com.example.dokotsubu.service.MutterService;
@@ -32,12 +35,16 @@ public class MutterController {
         List<Mutter> mutterList = mutterService.findAll();
         model.addAttribute("mutterList", mutterList);
 
+        // フォームの初期化
+        model.addAttribute("postMutterForm", new PostMutterForm());
+
         return "main";
     }
 
     @PostMapping("/main")
     public String postMutter(
-            @RequestParam("text") String text,
+            @Validated @ModelAttribute("postMutterForm") PostMutterForm form,
+            BindingResult result,
             HttpSession session,
             Model model) {
 
@@ -46,16 +53,14 @@ public class MutterController {
             return "redirect:/";
         }
 
-        if (text != null && !text.isEmpty()) {
-            Mutter mutter = new Mutter(loginUser.getName(), text);
-            mutterService.create(mutter);
-        } else {
-            model.addAttribute("errorMsg", "つぶやきが入力されていません");
-            // エラー時はそのまま画面再表示（リストも再取得必要）
+        if (result.hasErrors()) {
             List<Mutter> mutterList = mutterService.findAll();
             model.addAttribute("mutterList", mutterList);
             return "main";
         }
+
+        Mutter mutter = new Mutter(loginUser.getName(), form.getText());
+        mutterService.create(mutter);
 
         // 成功時はRedirect (PRGパターン)
         return "redirect:/main";
@@ -65,5 +70,19 @@ public class MutterController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "logout";
+    }
+
+    @PostMapping("/main/delete/{id}")
+    public String deleteMutter(@org.springframework.web.bind.annotation.PathVariable Integer id, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        if (loginUser == null) {
+            return "redirect:/";
+        }
+
+        // サービスに削除を依頼（所有者チェックはサービス内で行う）
+        mutterService.delete(id, loginUser.getName());
+
+        return "redirect:/main";
     }
 }

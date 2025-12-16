@@ -1,0 +1,2 @@
+INSERT INTO USERS (NAME, PASS) VALUES ('admin', '1234');
+INSERT INTO MUTTERS (USER_NAME, TEXT) VALUES ('admin', '管理者の最初のつぶやきです。');

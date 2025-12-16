@@ -21,4 +21,14 @@ public class MutterService {
     public void create(Mutter mutter) {
         repository.save(mutter);
     }
+
+    public void delete(Integer id, String userName) {
+        // IDで検索
+        Mutter mutter = repository.findById(id).orElse(null);
+
+        // 存在し、かつユーザー名が一致する場合のみ削除
+        if (mutter != null && mutter.getUserName().equals(userName)) {
+            repository.deleteById(id);
+        }
+    }
 }

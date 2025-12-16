@@ -14,17 +14,22 @@
     </p>
     <p><a th:href="@{/main}">更新</a></p>
 
-    <form th:action="@{/main}" method="post">
-        <input type="text" name="text">
+    <form th:action="@{/main}" method="post" th:object="${postMutterForm}">
+        <input type="text" th:field="*{text}">
         <input type="submit" value="つぶやく">
+        <div th:if="${#fields.hasErrors('text')}" th:errors="*{text}" style="color: red;"></div>
     </form>
-
-    <p th:if="${errorMsg}" th:text="${errorMsg}" style="color: red;"></p>
 
     <div th:each="mutter : ${mutterList}">
         <p>
             <span th:text="${mutter.userName}">ユーザー名</span>：
             <span th:text="${mutter.text}">つぶやき</span>
+
+            <!-- 自分のつぶやきの場合のみ削除ボタンを表示 -->
+        <form th:if="${session.loginUser.name == mutter.userName}" th:action="@{/main/delete/{id}(id=${mutter.id})}"
+            method="post" style="display:inline;">
+            <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
+        </form>
         </p>
     </div>
 
