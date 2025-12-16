@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>どこつぶ</title>
+</head>
+<body>
+<h1>どこつぶへようこそ (Spring Boot)</h1>
+<form th:action="@{/login}" method="post">
+ユーザー名：<input type="text" name="name" value="湊 雄輔"><br>
+パスワード：<input type="password" name="pass" value="1234"><br>
+<input type="submit" value="ログイン">
+</form>
+</body>
+</html>

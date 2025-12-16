@@ -1,0 +1,37 @@
+# Eclipse
+.settings/
+.classpath
+.project
+.metadata/
+bin/
+build/
+*.class
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# Spring Boot
+.mvn/
+
+# H2
+*.db
+*.trace.db
+
+# Logs
+*.log
+
+# Mac
+.DS_Store
+
+# Legacy Code (Backup/Reference)
+_legacy/
+_old_src/

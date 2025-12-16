@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>どこつぶ</title>
+</head>
+
+<body>
+    <h1>どこつぶログイン</h1>
+    <!-- Controllerでログイン成功時のみここに遷移するようにしているので、if分岐は不要 -->
+    <p>ログインに成功しました</p>
+    <p>ようこそ<span th:text="${session.loginUser.name}">名前</span>さん</p>
+    <a th:href="@{/main}">つぶやき投稿・閲覧へ</a>
+</body>
+
+</html>
